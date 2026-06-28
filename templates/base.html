@@ -26,8 +26,8 @@
       <a href="{{ url_for('index') }}#inicio">Início</a>
       <a href="{{ url_for('index') }}#ferramentas">Ferramentas</a>
       <a href="{{ url_for('index') }}#categorias">Categorias</a>
-      <a href="{{ url_for('index') }}#sobre">Sobre</a>
-      <a href="{{ url_for('index') }}#contato">Contato</a>
+      <a href="{{ url_for('index') }}#site">Sobre</a>
+      <a href="{{ url_for('index') }}#site">Contato</a>
       {% if session.get('admin_id') %}
         <a class="nav-admin" href="{{ url_for('admin_dashboard') }}"><i data-lucide="layout-dashboard"></i> Painel</a>
       {% else %}

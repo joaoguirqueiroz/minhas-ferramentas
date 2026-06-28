@@ -433,14 +433,20 @@ h3 { color: inherit; font-size: 21px; line-height: 1.2; }
 
 .category-section { background: #eef4fb; }
 
-.category-grid, .stats-grid {
+.stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 14px;
 }
 
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+  gap: 18px;
+}
+
 .category-card, .stat-card {
-  min-height: 128px;
+  min-height: 148px;
   padding: 20px;
   color: var(--text-dark);
   border-color: var(--line-dark);
@@ -457,7 +463,15 @@ h3 { color: inherit; font-size: 21px; line-height: 1.2; }
   background: var(--accent);
 }
 
-.category-card strong, .stat-card strong { display: block; font-size: 26px; }
+.category-card strong {
+  display: block;
+  max-width: 100%;
+  font-size: clamp(23px, 1.75vw, 30px);
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+
+.stat-card strong { display: block; font-size: 26px; }
 .category-card small, .stat-card span { color: var(--muted-dark); }
 
 .split-layout {
@@ -840,6 +854,26 @@ h3 { color: inherit; font-size: 21px; line-height: 1.2; }
   .admin-actions .button, .admin-actions form, .admin-actions .icon-button, .form-actions .button, .hero-actions .button, .contact-inner .button { width: 100%; line-height: 1.25; }
   .admin-actions form .icon-button { width: 100%; }
   .flash-stack { top: 90px; }
+}
+
+@media (max-width: 480px) {
+  .tools-section, .category-section, .contact-section, .detail-hero, .admin-section, .error-section, .admin-login-section {
+    padding: 58px 0;
+  }
+
+  .category-card {
+    min-height: 122px;
+    padding: 18px;
+  }
+
+  .category-card strong {
+    font-size: 25px;
+    line-height: 1.1;
+  }
+
+  .category-card span {
+    margin-bottom: 14px;
+  }
 }
 
 @media (min-width: 1600px) {
