@@ -24,6 +24,37 @@ DEFAULT_CATEGORIES = [
     ("Outros", "#94a3b8", 70),
 ]
 
+DEFAULT_SITE_SETTINGS = {
+    "site_name": "Confira Outras Ferramentas Desenvolvidas por Mim",
+    "brand_name": "Minhas Ferramentas",
+    "brand_subtitle": "por João Guilherme",
+    "hero_badge": "Hub inteligente de projetos",
+    "hero_title": "Confira Outras Ferramentas Desenvolvidas por Mim",
+    "hero_subtitle": "Conheça todas as ferramentas desenvolvidas para facilitar o dia a dia, aumentar a segurança digital e oferecer soluções inteligentes.",
+    "hero_primary_label": "Explorar Ferramentas",
+    "hero_secondary_label": "Ver sobre o site",
+    "tools_badge": "Busca instantânea",
+    "tools_title": "Ferramentas em poucos segundos",
+    "tools_subtitle": "Filtre por nome, categoria, tag ou palavra-chave sem recarregar a página.",
+    "categories_badge": "Organização",
+    "categories_title": "Categorias para navegar melhor",
+    "categories_subtitle": "O portal foi pensado para crescer sem perder clareza.",
+    "about_badge": "Tecnologia com confiança",
+    "about_title": "Um portal com aparência de empresa de tecnologia de alto nível",
+    "about_body": "O design combina navegação simples, cartões informativos, filtros rápidos e uma estrutura pronta para evoluir com novos projetos.",
+    "about_item_1": "Busca em tempo real por nome, categoria e tags.",
+    "about_item_2": "Layout responsivo para celular, tablet, notebook, ultrawide e TV.",
+    "about_item_3": "Ferramentas organizadas por categoria, status, tags e destaque.",
+    "about_item_4": "Arquitetura leve em Flask, SQLite e arquivos estáticos otimizados.",
+    "final_badge": "Site oficial",
+    "final_title": "Acesse o link principal do site",
+    "final_body": "Depois que o projeto estiver online, coloque aqui a URL final para visitantes abrirem o site correto.",
+    "final_button_label": "Abrir site",
+    "final_button_url": "https://github.com/joaoguirqueiroz/minhas-ferramentas",
+    "footer_title": "Confira Outras Ferramentas Desenvolvidas por Mim",
+    "footer_subtitle": "Hub premium para projetos, utilidades e soluções digitais.",
+}
+
 DEFAULT_TOOLS = [
     ("IA ou Real?", "Verificação", "Análise estimativa para textos, imagens, áudios e vídeos com sinais técnicos de geração por IA.", "Ferramenta criada para apoiar verificações digitais rápidas com relatório técnico, explicação simples e sinais organizados.", ["IA", "verificação", "conteúdo digital"], ["Análise de conteúdo digital", "Relatório técnico", "Explicação simples"], "/static/images/tool-ai-real.png", "#35d0ff", 10, 1, 1, 0),
     ("Sentinel Vision", "Monitoramento", "Monitoramento visual para operações de segurança, leitura de placas e acompanhamento de ocorrências.", "Painel operacional para equipes que precisam acompanhar câmeras, eventos, alertas e indicadores em tempo real.", ["monitoramento", "segurança", "câmeras"], ["Indicadores em tempo real", "Controle de ocorrências", "Visual institucional"], "/static/images/tool-sentinel.png", "#7cf7c8", 20, 1, 0, 0),
@@ -91,6 +122,12 @@ def init_db():
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS site_settings (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
             """
         )
         seed_defaults(conn)
@@ -98,6 +135,12 @@ def init_db():
 
 
 def seed_defaults(conn):
+    for key, value in DEFAULT_SITE_SETTINGS.items():
+        conn.execute(
+            "INSERT OR IGNORE INTO site_settings (key, value, updated_at) VALUES (?, ?, ?)",
+            (key, value, now()),
+        )
+
     for name, color, sort_order in DEFAULT_CATEGORIES:
         conn.execute(
             "INSERT OR IGNORE INTO categories (name, slug, color, sort_order, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
@@ -130,7 +173,7 @@ def seed_defaults(conn):
             )
     if conn.execute("SELECT COUNT(*) AS total FROM administrators").fetchone()["total"] == 0:
         username = os.environ.get("ADMIN_USERNAME", "admin")
-        password_hash = os.environ.get("ADMIN_PASSWORD_HASH") or generate_password_hash(os.environ.get("ADMIN_PASSWORD", "admin123"))
+        password_hash = os.environ.get("ADMIN_PASSWORD_HASH") or generate_password_hash(os.environ.get("ADMIN_PASSWORD", "85518510"))
         conn.execute(
             "INSERT INTO administrators (username, password_hash, created_at, updated_at) VALUES (?, ?, ?, ?)",
             (username, password_hash, now(), now()),
@@ -388,6 +431,40 @@ def get_admin_by_username(username):
     with closing(get_connection()) as conn:
         row = conn.execute("SELECT * FROM administrators WHERE username = ?", (username,)).fetchone()
     return dict(row) if row else None
+
+
+def set_admin_password(username, password):
+    with closing(get_connection()) as conn:
+        conn.execute(
+            "UPDATE administrators SET password_hash = ?, updated_at = ? WHERE username = ?",
+            (generate_password_hash(password), now(), username),
+        )
+        conn.commit()
+
+
+def get_site_settings():
+    settings = dict(DEFAULT_SITE_SETTINGS)
+    with closing(get_connection()) as conn:
+        rows = conn.execute("SELECT key, value FROM site_settings").fetchall()
+    for row in rows:
+        settings[row["key"]] = row["value"]
+    return settings
+
+
+def update_site_settings(values):
+    with closing(get_connection()) as conn:
+        for key in DEFAULT_SITE_SETTINGS:
+            if key not in values:
+                continue
+            conn.execute(
+                """
+                INSERT INTO site_settings (key, value, updated_at)
+                VALUES (?, ?, ?)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
+                """,
+                (key, values[key], now()),
+            )
+        conn.commit()
 
 
 def get_dashboard_stats():

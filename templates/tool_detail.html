@@ -12,9 +12,9 @@
       <p>{{ tool.full_description }}</p>
       <div class="hero-actions">
         {% if tool.link and tool.link != "#" %}
-          <a class="button button-primary" href="{{ tool.link }}" target="_blank" rel="noopener"><i data-lucide="external-link"></i> Acessar Ferramenta</a>
+          <a class="button button-primary" href="{{ tool.link }}" target="_blank" rel="noopener"><i data-lucide="external-link"></i> Abrir link do site</a>
         {% else %}
-          <a class="button button-primary" href="{{ url_for('index') }}#contato"><i data-lucide="send"></i> Solicitar acesso</a>
+          <span class="button button-disabled"><i data-lucide="link-2-off"></i> Link do site não cadastrado</span>
         {% endif %}
         <a class="button button-secondary" href="{{ url_for('index') }}#ferramentas"><i data-lucide="grid-3x3"></i> Ver todas</a>
       </div>

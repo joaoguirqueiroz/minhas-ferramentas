@@ -10,6 +10,7 @@ Hub profissional em Flask para apresentar ferramentas, organizar categorias e ge
 - Painel administrativo em `/admin`.
 - Cadastro, edição, exclusão, duplicação, ordenação e ocultação de ferramentas.
 - Criação, edição e exclusão segura de categorias.
+- Tela `Editar site` para alterar textos públicos, link principal do site, rodapé e senha administrativa.
 - Upload de imagem para ferramentas.
 - Estatísticas de ferramentas, categorias, destaques e acessos.
 - SQLite inicial, senha com hash, sessão, CSRF, validação e limite de tentativas de login.
@@ -45,7 +46,7 @@ Copie `.env.example` para `.env` e ajuste:
 ```env
 SECRET_KEY=troque-por-uma-chave-grande
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=troque-esta-senha
+ADMIN_PASSWORD=85518510
 FORCE_HTTPS=0
 ```
 
@@ -53,7 +54,7 @@ Se nenhuma variável for definida, o primeiro administrador local será:
 
 ```text
 Usuário: admin
-Senha: admin123
+Senha: 85518510
 ```
 
 Troque isso antes de publicar.
@@ -91,6 +92,17 @@ No painel administrativo, use os botões de ação ao lado de cada ferramenta:
 - lápis: editar;
 - cópia: duplicar;
 - lixeira: excluir.
+
+## Editar o site
+
+No painel administrativo, clique em `Editar site`.
+
+Nessa tela você pode alterar:
+
+- textos do topo, hero, ferramentas, categorias, sobre e rodapé;
+- link principal exibido no final do site;
+- texto do botão final;
+- senha do administrador.
 
 ## Publicar no Render
 

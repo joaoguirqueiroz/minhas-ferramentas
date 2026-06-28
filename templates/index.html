@@ -8,15 +8,12 @@
   </div>
   <div class="section-inner hero-inner">
     <div class="hero-copy reveal">
-      <span class="eyebrow"><i data-lucide="command"></i> Hub inteligente de projetos</span>
-      <h1>Confira Outras Ferramentas Desenvolvidas por Mim</h1>
-      <p>
-        Conheça todas as ferramentas desenvolvidas para facilitar o dia a dia,
-        aumentar a segurança digital e oferecer soluções inteligentes.
-      </p>
+      <span class="eyebrow"><i data-lucide="command"></i> {{ site_settings.hero_badge }}</span>
+      <h1>{{ site_settings.hero_title }}</h1>
+      <p>{{ site_settings.hero_subtitle }}</p>
       <div class="hero-actions">
-        <a class="button button-primary" href="#ferramentas"><i data-lucide="compass"></i> Explorar Ferramentas</a>
-        <a class="button button-secondary" href="#sobre"><i data-lucide="cpu"></i> Ver visão geral</a>
+        <a class="button button-primary" href="#ferramentas"><i data-lucide="compass"></i> {{ site_settings.hero_primary_label }}</a>
+        <a class="button button-secondary" href="#sobre"><i data-lucide="cpu"></i> {{ site_settings.hero_secondary_label }}</a>
       </div>
     </div>
 
@@ -31,9 +28,9 @@
 <section class="section-band tools-section" id="ferramentas">
   <div class="section-inner">
     <div class="section-heading reveal">
-      <span class="eyebrow"><i data-lucide="search-check"></i> Busca instantânea</span>
-      <h2>Ferramentas em poucos segundos</h2>
-      <p>Filtre por nome, categoria, tag ou palavra-chave sem recarregar a página.</p>
+      <span class="eyebrow"><i data-lucide="search-check"></i> {{ site_settings.tools_badge }}</span>
+      <h2>{{ site_settings.tools_title }}</h2>
+      <p>{{ site_settings.tools_subtitle }}</p>
     </div>
 
     <div class="tool-controls reveal" aria-label="Filtros de ferramentas">
@@ -51,7 +48,7 @@
 
     <div class="result-line reveal">
       <span><strong data-result-count>{{ tools|length }}</strong> ferramentas encontradas</span>
-      <span>Atualização contínua pelo painel administrativo</span>
+      <span>Conteúdo organizado por categoria, tag e status</span>
     </div>
 
     <div class="tools-grid" data-tools-grid>
@@ -63,7 +60,7 @@
           data-search="{{ tool.name }} {{ tool.category_name }} {{ tool.short_description }} {{ tool.tags|join(' ') }}"
           style="--accent: {{ tool.card_color }};"
         >
-          <a class="tool-image" href="{{ url_for('tool_detail', slug=tool.slug) }}" aria-label="Abrir {{ tool.name }}">
+          <a class="tool-image" href="{{ url_for('tool_detail', slug=tool.slug) }}" aria-label="Ver sobre {{ tool.name }}">
             {% if tool.image_url %}
               <img src="{{ tool.image_url }}" alt="Prévia visual de {{ tool.name }}" loading="lazy">
             {% else %}
@@ -88,7 +85,7 @@
               {% if tool.is_beta %}<strong>Beta</strong>{% endif %}
             </div>
             <a class="button button-card" href="{{ url_for('tool_detail', slug=tool.slug) }}">
-              <i data-lucide="external-link"></i> Acessar Ferramenta
+              <i data-lucide="info"></i> Ver sobre o site
             </a>
           </div>
         </article>
@@ -106,9 +103,9 @@
 <section class="section-band category-section" id="categorias">
   <div class="section-inner">
     <div class="section-heading reveal">
-      <span class="eyebrow"><i data-lucide="layers-3"></i> Organização</span>
-      <h2>Categorias para navegar melhor</h2>
-      <p>O portal foi pensado para crescer sem perder clareza.</p>
+      <span class="eyebrow"><i data-lucide="layers-3"></i> {{ site_settings.categories_badge }}</span>
+      <h2>{{ site_settings.categories_title }}</h2>
+      <p>{{ site_settings.categories_subtitle }}</p>
     </div>
     <div class="category-grid">
       {% for category in categories %}
@@ -125,18 +122,15 @@
 <section class="section-band about-section" id="sobre">
   <div class="section-inner split-layout">
     <div class="section-heading reveal">
-      <span class="eyebrow"><i data-lucide="shield"></i> Tecnologia com confiança</span>
-      <h2>Um portal com aparência de empresa de tecnologia de alto nível</h2>
-      <p>
-        O design combina navegação simples, cartões informativos, filtros rápidos,
-        área administrativa protegida e estrutura pronta para evoluir com novos projetos.
-      </p>
+      <span class="eyebrow"><i data-lucide="shield"></i> {{ site_settings.about_badge }}</span>
+      <h2>{{ site_settings.about_title }}</h2>
+      <p>{{ site_settings.about_body }}</p>
     </div>
     <div class="quality-list reveal">
-      <div><i data-lucide="lock-keyhole"></i><span>Sessão administrativa, senha com hash, CSRF e limite de login.</span></div>
-      <div><i data-lucide="scan-search"></i><span>Busca em tempo real por nome, categoria e tags.</span></div>
-      <div><i data-lucide="smartphone"></i><span>Layout responsivo para celular, tablet, notebook, ultrawide e TV.</span></div>
-      <div><i data-lucide="gauge"></i><span>Arquitetura leve em Flask, SQLite e arquivos estáticos otimizados.</span></div>
+      <div><i data-lucide="scan-search"></i><span>{{ site_settings.about_item_1 }}</span></div>
+      <div><i data-lucide="smartphone"></i><span>{{ site_settings.about_item_2 }}</span></div>
+      <div><i data-lucide="layers-3"></i><span>{{ site_settings.about_item_3 }}</span></div>
+      <div><i data-lucide="gauge"></i><span>{{ site_settings.about_item_4 }}</span></div>
     </div>
   </div>
 </section>
@@ -144,11 +138,13 @@
 <section class="section-band contact-section" id="contato">
   <div class="section-inner contact-inner reveal">
     <div>
-      <span class="eyebrow"><i data-lucide="send"></i> Contato</span>
-      <h2>Novas ferramentas podem entrar no portal em minutos</h2>
-      <p>Use o painel administrativo para cadastrar, destacar, ocultar, duplicar e organizar cada projeto.</p>
+      <span class="eyebrow"><i data-lucide="link"></i> {{ site_settings.final_badge }}</span>
+      <h2>{{ site_settings.final_title }}</h2>
+      <p>{{ site_settings.final_body }}</p>
     </div>
-    <a class="button button-primary" href="{{ url_for('admin_login') }}"><i data-lucide="shield-check"></i> Área do Administrador</a>
+    <a class="button button-primary" href="{{ site_settings.final_button_url }}" target="_blank" rel="noopener">
+      <i data-lucide="external-link"></i> {{ site_settings.final_button_label }}
+    </a>
   </div>
 </section>
 {% endblock %}

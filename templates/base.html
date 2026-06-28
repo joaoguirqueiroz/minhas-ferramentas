@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Hub profissional com ferramentas desenvolvidas por João Guilherme.">
+  <meta name="description" content="{{ site_settings.hero_subtitle }}">
   <meta name="theme-color" content="#05070d">
   <title>{% block title %}{{ site_name }}{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -13,8 +13,8 @@
     <a class="brand" href="{{ url_for('index') }}" aria-label="Página inicial">
       <span class="brand-mark" aria-hidden="true"><i data-lucide="sparkles"></i></span>
       <span>
-        <strong>Minhas Ferramentas</strong>
-        <small>por João Guilherme</small>
+        <strong>{{ site_settings.brand_name }}</strong>
+        <small>{{ site_settings.brand_subtitle }}</small>
       </span>
     </a>
 
@@ -50,8 +50,8 @@
 
   <footer class="site-footer">
     <div>
-      <strong>Confira Outras Ferramentas Desenvolvidas por Mim</strong>
-      <span>Hub premium para projetos, utilidades e soluções digitais.</span>
+      <strong>{{ site_settings.footer_title }}</strong>
+      <span>{{ site_settings.footer_subtitle }}</span>
     </div>
     <p>Desenvolvido por João Guilherme</p>
   </footer>

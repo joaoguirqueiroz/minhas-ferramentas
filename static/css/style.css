@@ -238,6 +238,8 @@ h3 { color: inherit; font-size: 21px; line-height: 1.2; }
 .button-primary { color: #06111a; background: linear-gradient(135deg, var(--cyan), var(--mint)); box-shadow: 0 16px 36px rgba(53, 208, 255, 0.24); }
 .button-secondary { color: var(--text); border-color: rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.08); }
 .button-card { width: 100%; min-height: 44px; margin-top: auto; color: #06111a; background: linear-gradient(135deg, var(--accent), #ffffff); }
+.button-disabled { color: #536173; border-color: var(--line-dark); background: #eef3f8; box-shadow: none; cursor: default; }
+.button-disabled:hover { transform: none; }
 
 .hero-panel { display: grid; gap: 12px; align-self: center; }
 
@@ -671,6 +673,21 @@ h3 { color: inherit; font-size: 21px; line-height: 1.2; }
 
 .narrow-inner { width: min(940px, calc(100% - 32px)); }
 .admin-form, .form-card { padding: 22px; }
+
+.form-section-title {
+  margin: 22px 0 14px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-dark);
+  color: #0b1220;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.form-section-title:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
 
 .form-grid {
   display: grid;

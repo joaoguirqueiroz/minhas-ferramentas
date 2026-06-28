@@ -22,13 +22,16 @@ from database import (
     get_admin_by_username,
     get_category,
     get_dashboard_stats,
+    get_site_settings,
     get_tool,
     get_tool_by_slug,
     increment_tool_access,
     init_db,
     list_categories,
     list_tools,
+    set_admin_password,
     update_category,
+    update_site_settings,
     update_tool,
 )
 
@@ -58,9 +61,11 @@ def create_app():
 
     @app.context_processor
     def inject_globals():
+        site_settings = get_site_settings()
         return {
             "csrf_token": csrf_token,
-            "site_name": "Confira Outras Ferramentas Desenvolvidas por Mim",
+            "site_settings": site_settings,
+            "site_name": site_settings["site_name"],
         }
 
     @app.before_request
@@ -139,6 +144,20 @@ def create_app():
     @login_required
     def admin_dashboard():
         return render_template("admin/dashboard.html", stats=get_dashboard_stats(), tools=list_tools(include_hidden=True), categories=list_categories())
+
+    @app.route("/admin/site", methods=["GET", "POST"])
+    @login_required
+    def admin_site_settings():
+        settings = get_site_settings()
+        if request.method == "POST":
+            payload = {key: (request.form.get(key) or "").strip() for key in settings.keys()}
+            update_site_settings(payload)
+            new_password = (request.form.get("admin_password") or "").strip()
+            if new_password:
+                set_admin_password(session.get("admin_username", "admin"), new_password)
+            flash("Configurações do site atualizadas.", "success")
+            return redirect(url_for("admin_site_settings"))
+        return render_template("admin/site_settings.html", settings=settings)
 
     @app.route("/admin/ferramentas/nova", methods=["GET", "POST"])
     @login_required

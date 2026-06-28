@@ -12,6 +12,7 @@
         <p>Controle completo das ferramentas exibidas no portal.</p>
       </div>
       <div class="admin-actions">
+        <a class="button button-secondary" href="{{ url_for('admin_site_settings') }}"><i data-lucide="settings"></i> Editar site</a>
         <a class="button button-secondary" href="{{ url_for('admin_categories') }}"><i data-lucide="folder-tree"></i> Categorias</a>
         <a class="button button-primary" href="{{ url_for('admin_tool_new') }}"><i data-lucide="plus"></i> Nova Ferramenta</a>
         <form method="post" action="{{ url_for('admin_logout') }}">

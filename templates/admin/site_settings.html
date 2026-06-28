@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Editar Site | {{ site_name }}{% endblock %}
+{% block body_class %}admin-page{% endblock %}
+
+{% block content %}
+<section class="section-band admin-section">
+  <div class="section-inner narrow-inner">
+    <div class="admin-top reveal">
+      <div>
+        <a class="back-link" href="{{ url_for('admin_dashboard') }}"><i data-lucide="arrow-left"></i> Voltar ao painel</a>
+        <h1>Editar site</h1>
+        <p>Altere textos públicos, link principal e senha administrativa.</p>
+      </div>
+    </div>
+
+    <form class="admin-form reveal" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="form-section-title">Identidade</div>
+      <div class="form-grid">
+        <label><span>Nome do site</span><input name="site_name" type="text" value="{{ settings.site_name }}"></label>
+        <label><span>Nome no topo</span><input name="brand_name" type="text" value="{{ settings.brand_name }}"></label>
+        <label><span>Subtítulo no topo</span><input name="brand_subtitle" type="text" value="{{ settings.brand_subtitle }}"></label>
+        <label><span>Senha admin</span><input name="admin_password" type="text" value="" placeholder="Digite para trocar"></label>
+      </div>
+
+      <div class="form-section-title">Hero</div>
+      <div class="form-grid">
+        <label><span>Selo</span><input name="hero_badge" type="text" value="{{ settings.hero_badge }}"></label>
+        <label><span>Botão principal</span><input name="hero_primary_label" type="text" value="{{ settings.hero_primary_label }}"></label>
+        <label class="full-span"><span>Título</span><textarea name="hero_title" rows="2">{{ settings.hero_title }}</textarea></label>
+        <label class="full-span"><span>Subtítulo</span><textarea name="hero_subtitle" rows="3">{{ settings.hero_subtitle }}</textarea></label>
+        <label><span>Botão sobre</span><input name="hero_secondary_label" type="text" value="{{ settings.hero_secondary_label }}"></label>
+      </div>
+
+      <div class="form-section-title">Ferramentas e categorias</div>
+      <div class="form-grid">
+        <label><span>Selo ferramentas</span><input name="tools_badge" type="text" value="{{ settings.tools_badge }}"></label>
+        <label><span>Título ferramentas</span><input name="tools_title" type="text" value="{{ settings.tools_title }}"></label>
+        <label class="full-span"><span>Subtítulo ferramentas</span><textarea name="tools_subtitle" rows="2">{{ settings.tools_subtitle }}</textarea></label>
+        <label><span>Selo categorias</span><input name="categories_badge" type="text" value="{{ settings.categories_badge }}"></label>
+        <label><span>Título categorias</span><input name="categories_title" type="text" value="{{ settings.categories_title }}"></label>
+        <label class="full-span"><span>Subtítulo categorias</span><textarea name="categories_subtitle" rows="2">{{ settings.categories_subtitle }}</textarea></label>
+      </div>
+
+      <div class="form-section-title">Sobre</div>
+      <div class="form-grid">
+        <label><span>Selo sobre</span><input name="about_badge" type="text" value="{{ settings.about_badge }}"></label>
+        <label><span>Título sobre</span><input name="about_title" type="text" value="{{ settings.about_title }}"></label>
+        <label class="full-span"><span>Texto sobre</span><textarea name="about_body" rows="3">{{ settings.about_body }}</textarea></label>
+        <label><span>Item 1</span><input name="about_item_1" type="text" value="{{ settings.about_item_1 }}"></label>
+        <label><span>Item 2</span><input name="about_item_2" type="text" value="{{ settings.about_item_2 }}"></label>
+        <label><span>Item 3</span><input name="about_item_3" type="text" value="{{ settings.about_item_3 }}"></label>
+        <label><span>Item 4</span><input name="about_item_4" type="text" value="{{ settings.about_item_4 }}"></label>
+      </div>
+
+      <div class="form-section-title">Final do site</div>
+      <div class="form-grid">
+        <label><span>Selo final</span><input name="final_badge" type="text" value="{{ settings.final_badge }}"></label>
+        <label><span>Texto do botão</span><input name="final_button_label" type="text" value="{{ settings.final_button_label }}"></label>
+        <label class="full-span"><span>Título final</span><textarea name="final_title" rows="2">{{ settings.final_title }}</textarea></label>
+        <label class="full-span"><span>Texto final</span><textarea name="final_body" rows="2">{{ settings.final_body }}</textarea></label>
+        <label class="full-span"><span>Link do site</span><input name="final_button_url" type="url" value="{{ settings.final_button_url }}"></label>
+      </div>
+
+      <div class="form-section-title">Rodapé</div>
+      <div class="form-grid">
+        <label><span>Título do rodapé</span><input name="footer_title" type="text" value="{{ settings.footer_title }}"></label>
+        <label><span>Subtítulo do rodapé</span><input name="footer_subtitle" type="text" value="{{ settings.footer_subtitle }}"></label>
+      </div>
+
+      <div class="form-actions">
+        <a class="button button-secondary" href="{{ url_for('admin_dashboard') }}"><i data-lucide="x"></i> Cancelar</a>
+        <button class="button button-primary" type="submit"><i data-lucide="save"></i> Salvar tudo</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
