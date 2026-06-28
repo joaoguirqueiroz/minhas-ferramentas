@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<section class="section-band error-section">
+  <div class="section-inner error-box reveal">
+    <span class="eyebrow"><i data-lucide="triangle-alert"></i> Erro {{ code }}</span>
+    <h1>{{ title }}</h1>
+    <p>{{ message }}</p>
+    <a class="button button-primary" href="{{ url_for('index') }}"><i data-lucide="home"></i> Voltar ao início</a>
+  </div>
+</section>
+{% endblock %}

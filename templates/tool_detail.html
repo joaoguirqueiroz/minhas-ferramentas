@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tool.name }} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<section class="detail-hero section-band">
+  <div class="section-inner detail-inner">
+    <div class="detail-copy reveal">
+      <a class="back-link" href="{{ url_for('index') }}#ferramentas"><i data-lucide="arrow-left"></i> Voltar</a>
+      <span class="eyebrow"><i data-lucide="box"></i> {{ tool.category_name or "Ferramenta" }}</span>
+      <h1>{{ tool.name }}</h1>
+      <p>{{ tool.full_description }}</p>
+      <div class="hero-actions">
+        {% if tool.link and tool.link != "#" %}
+          <a class="button button-primary" href="{{ tool.link }}" target="_blank" rel="noopener"><i data-lucide="external-link"></i> Acessar Ferramenta</a>
+        {% else %}
+          <a class="button button-primary" href="{{ url_for('index') }}#contato"><i data-lucide="send"></i> Solicitar acesso</a>
+        {% endif %}
+        <a class="button button-secondary" href="{{ url_for('index') }}#ferramentas"><i data-lucide="grid-3x3"></i> Ver todas</a>
+      </div>
+    </div>
+    <div class="detail-visual reveal" style="--accent: {{ tool.card_color }};">
+      {% if tool.image_url %}
+        <img src="{{ tool.image_url }}" alt="Prévia de {{ tool.name }}">
+      {% else %}
+        <span class="image-fallback"><i data-lucide="app-window"></i></span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section-band">
+  <div class="section-inner detail-grid">
+    <article class="detail-panel reveal">
+      <h2>Recursos</h2>
+      <ul class="feature-list">
+        {% for feature in tool.features %}
+          <li><i data-lucide="check-circle-2"></i>{{ feature }}</li>
+        {% else %}
+          <li><i data-lucide="check-circle-2"></i>Cadastro completo no hub administrativo.</li>
+        {% endfor %}
+      </ul>
+    </article>
+    <aside class="detail-panel reveal">
+      <h2>Informações</h2>
+      <dl class="meta-list">
+        <div><dt>Status</dt><dd>{{ tool.status }}</dd></div>
+        <div><dt>Versão</dt><dd>{{ tool.version }}</dd></div>
+        <div><dt>Atualização</dt><dd>{{ tool.updated_at }}</dd></div>
+        <div><dt>Autor</dt><dd>João Guilherme</dd></div>
+      </dl>
+      <div class="tag-list detail-tags">
+        {% for tag in tool.tags %}<span>{{ tag }}</span>{% endfor %}
+      </div>
+    </aside>
+  </div>
+</section>
+
+{% if related %}
+<section class="section-band">
+  <div class="section-inner">
+    <div class="section-heading reveal">
+      <span class="eyebrow"><i data-lucide="shuffle"></i> Relacionadas</span>
+      <h2>Outras ferramentas desta categoria</h2>
+    </div>
+    <div class="tools-grid compact-grid">
+      {% for item in related %}
+        <article class="tool-card reveal" style="--accent: {{ item.card_color }};">
+          <a class="tool-image" href="{{ url_for('tool_detail', slug=item.slug) }}">
+            <img src="{{ item.image_url }}" alt="Prévia de {{ item.name }}" loading="lazy">
+          </a>
+          <div class="tool-card-body">
+            <span class="category-pill">{{ item.category_name }}</span>
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.short_description }}</p>
+            <a class="button button-card" href="{{ url_for('tool_detail', slug=item.slug) }}"><i data-lucide="external-link"></i> Acessar</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

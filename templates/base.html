@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hub profissional com ferramentas desenvolvidas por João Guilherme.">
+  <meta name="theme-color" content="#05070d">
+  <title>{% block title %}{{ site_name }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <header class="site-header" data-header>
+    <a class="brand" href="{{ url_for('index') }}" aria-label="Página inicial">
+      <span class="brand-mark" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+      <span>
+        <strong>Minhas Ferramentas</strong>
+        <small>por João Guilherme</small>
+      </span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" data-nav-toggle>
+      <i data-lucide="menu"></i>
+    </button>
+
+    <nav class="main-nav" aria-label="Navegação principal" data-nav>
+      <a href="{{ url_for('index') }}#inicio">Início</a>
+      <a href="{{ url_for('index') }}#ferramentas">Ferramentas</a>
+      <a href="{{ url_for('index') }}#categorias">Categorias</a>
+      <a href="{{ url_for('index') }}#sobre">Sobre</a>
+      <a href="{{ url_for('index') }}#contato">Contato</a>
+      {% if session.get('admin_id') %}
+        <a class="nav-admin" href="{{ url_for('admin_dashboard') }}"><i data-lucide="layout-dashboard"></i> Painel</a>
+      {% else %}
+        <a class="nav-admin" href="{{ url_for('admin_login') }}"><i data-lucide="shield-check"></i> Área do Administrador</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <div class="flash-stack" aria-live="polite">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+  </div>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <strong>Confira Outras Ferramentas Desenvolvidas por Mim</strong>
+      <span>Hub premium para projetos, utilidades e soluções digitais.</span>
+    </div>
+    <p>Desenvolvido por João Guilherme</p>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{% if tool %}Editar{% else %}Nova{% endif %} Ferramenta | {{ site_name }}{% endblock %}
+{% block body_class %}admin-page{% endblock %}
+
+{% block content %}
+<section class="section-band admin-section">
+  <div class="section-inner narrow-inner">
+    <div class="admin-top reveal">
+      <div>
+        <a class="back-link" href="{{ url_for('admin_dashboard') }}"><i data-lucide="arrow-left"></i> Voltar ao painel</a>
+        <h1>{% if tool %}Editar ferramenta{% else %}Nova ferramenta{% endif %}</h1>
+        <p>Defina conteúdo, categoria, visual, status e exibição pública.</p>
+      </div>
+    </div>
+
+    <form class="admin-form reveal" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="form-grid">
+        <label><span>Nome</span><input name="name" type="text" value="{{ tool.name if tool else '' }}" required></label>
+        <label>
+          <span>Categoria</span>
+          <select name="category_id" required>
+            {% for category in categories %}
+              <option value="{{ category.id }}" {% if tool and tool.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label><span>Descrição curta</span><textarea name="short_description" rows="3" required>{{ tool.short_description if tool else '' }}</textarea></label>
+        <label><span>Descrição completa</span><textarea name="full_description" rows="6" required>{{ tool.full_description if tool else '' }}</textarea></label>
+        <label><span>Tags</span><input name="tags" type="text" value="{{ tool.tags|join(', ') if tool else '' }}" placeholder="IA, segurança, dashboard"></label>
+        <label><span>Link</span><input name="link" type="url" value="{{ tool.link if tool else '' }}" placeholder="https://..."></label>
+        <label><span>Imagem por URL</span><input name="image_url" type="text" value="{{ tool.image_url if tool else '' }}" placeholder="/static/images/exemplo.png"></label>
+        <label><span>Enviar imagem</span><input name="image_file" type="file" accept=".png,.jpg,.jpeg,.webp,.gif"></label>
+        <label><span>Versão</span><input name="version" type="text" value="{{ tool.version if tool else '1.0' }}"></label>
+        <label><span>Status</span><input name="status" type="text" value="{{ tool.status if tool else 'Ativo' }}"></label>
+        <label><span>Cor do card</span><input name="card_color" type="color" value="{{ tool.card_color if tool else '#35d0ff' }}"></label>
+        <label><span>Ordem</span><input name="sort_order" type="number" value="{{ tool.sort_order if tool else 0 }}"></label>
+        <label class="full-span"><span>Recursos</span><textarea name="features" rows="5" placeholder="Um recurso por linha">{{ tool.features|join('\n') if tool else '' }}</textarea></label>
+        <label class="full-span"><span>Capturas de tela</span><textarea name="screenshots" rows="4" placeholder="Uma URL de imagem por linha">{{ tool.screenshots|join('\n') if tool else '' }}</textarea></label>
+      </div>
+
+      <div class="toggle-grid">
+        <label class="toggle"><input name="featured" type="checkbox" {% if tool and tool.featured %}checked{% endif %}><span>Destaque</span></label>
+        <label class="toggle"><input name="is_new" type="checkbox" {% if tool and tool.is_new %}checked{% endif %}><span>Novidade</span></label>
+        <label class="toggle"><input name="is_beta" type="checkbox" {% if tool and tool.is_beta %}checked{% endif %}><span>Beta</span></label>
+        <label class="toggle"><input name="hidden" type="checkbox" {% if tool and tool.hidden %}checked{% endif %}><span>Esconder</span></label>
+      </div>
+
+      <div class="form-actions">
+        <a class="button button-secondary" href="{{ url_for('admin_dashboard') }}"><i data-lucide="x"></i> Cancelar</a>
+        <button class="button button-primary" type="submit"><i data-lucide="save"></i> Salvar</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

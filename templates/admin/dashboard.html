@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Painel Administrativo | {{ site_name }}{% endblock %}
+{% block body_class %}admin-page{% endblock %}
+
+{% block content %}
+<section class="section-band admin-section">
+  <div class="section-inner">
+    <div class="admin-top reveal">
+      <div>
+        <span class="eyebrow"><i data-lucide="layout-dashboard"></i> Administração</span>
+        <h1>Painel Administrativo</h1>
+        <p>Controle completo das ferramentas exibidas no portal.</p>
+      </div>
+      <div class="admin-actions">
+        <a class="button button-secondary" href="{{ url_for('admin_categories') }}"><i data-lucide="folder-tree"></i> Categorias</a>
+        <a class="button button-primary" href="{{ url_for('admin_tool_new') }}"><i data-lucide="plus"></i> Nova Ferramenta</a>
+        <form method="post" action="{{ url_for('admin_logout') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="icon-button" type="submit" title="Sair" aria-label="Sair"><i data-lucide="log-out"></i></button>
+        </form>
+      </div>
+    </div>
+
+    <div class="stats-grid reveal">
+      <div class="stat-card"><span>Ferramentas</span><strong>{{ stats.tools_total }}</strong></div>
+      <div class="stat-card"><span>Visíveis</span><strong>{{ stats.visible_total }}</strong></div>
+      <div class="stat-card"><span>Categorias</span><strong>{{ stats.categories_total }}</strong></div>
+      <div class="stat-card"><span>Acessos</span><strong>{{ stats.access_total }}</strong></div>
+      <div class="stat-card"><span>Destaques</span><strong>{{ stats.featured_total }}</strong></div>
+    </div>
+
+    <div class="admin-grid">
+      <section class="admin-panel reveal">
+        <div class="panel-heading"><h2>Ferramentas cadastradas</h2><span>{{ tools|length }} itens</span></div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Nome</th><th>Categoria</th><th>Status</th><th>Acessos</th><th>Ações</th></tr></thead>
+            <tbody>
+              {% for tool in tools %}
+              <tr>
+                <td><strong>{{ tool.name }}</strong><small>{% if tool.hidden %}Oculta{% else %}Visível{% endif %}{% if tool.featured %} · Destaque{% endif %}</small></td>
+                <td>{{ tool.category_name or "Outros" }}</td>
+                <td>{{ tool.status }}</td>
+                <td>{{ tool.access_count }}</td>
+                <td>
+                  <div class="table-actions">
+                    <a class="icon-button" href="{{ url_for('admin_tool_edit', tool_id=tool.id) }}" title="Editar" aria-label="Editar {{ tool.name }}"><i data-lucide="pencil"></i></a>
+                    <form method="post" action="{{ url_for('admin_tool_duplicate', tool_id=tool.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="icon-button" type="submit" title="Duplicar" aria-label="Duplicar {{ tool.name }}"><i data-lucide="copy"></i></button></form>
+                    <form method="post" action="{{ url_for('admin_tool_delete', tool_id=tool.id) }}" data-confirm="Excluir esta ferramenta?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="icon-button danger" type="submit" title="Excluir" aria-label="Excluir {{ tool.name }}"><i data-lucide="trash-2"></i></button></form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <aside class="admin-panel reveal">
+        <div class="panel-heading"><h2>Mais acessadas</h2><span>Estatísticas</span></div>
+        <div class="bar-list">
+          {% for tool in stats.most_accessed %}
+            {% set width = 8 + (tool.access_count if tool.access_count < 92 else 92) %}
+            <div class="bar-item"><div><strong>{{ tool.name }}</strong><span>{{ tool.access_count }} acessos</span></div><span class="bar-track"><span style="width: {{ width }}%"></span></span></div>
+          {% endfor %}
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
