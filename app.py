@@ -96,7 +96,15 @@ def create_app():
         tools = list_tools(include_hidden=False)
         return render_template("index.html", tools=tools, categories=categories, stats=get_dashboard_stats())
 
+    @app.route("/ferramentas")
+    @app.route("/ferramentas/")
+    @app.route("/links")
+    @app.route("/links/")
+    def tools_anchor():
+        return redirect(url_for("index") + "#ferramentas")
+
     @app.route("/ferramenta/<slug>")
+    @app.route("/ferramenta/<slug>/")
     def tool_detail(slug):
         tool = get_tool_by_slug(slug, include_hidden=False)
         if not tool:
@@ -110,9 +118,14 @@ def create_app():
         return render_template("tool_detail.html", tool=tool, related=related)
 
     @app.route("/admin", methods=["GET", "POST"])
+    @app.route("/admin/", methods=["GET", "POST"])
+    @app.route("/admin/login", methods=["GET", "POST"])
+    @app.route("/admin/login/", methods=["GET", "POST"])
+    @app.route("/login", methods=["GET", "POST"])
+    @app.route("/login/", methods=["GET", "POST"])
     def admin_login():
         if is_logged_in():
-            return redirect(url_for("admin_dashboard"))
+            return redirect("/admin/dashboard")
         if request.method == "POST":
             ip_address = request.headers.get("X-Forwarded-For", request.remote_addr or "local").split(",")[0].strip()
             if is_rate_limited(ip_address):
@@ -128,7 +141,7 @@ def create_app():
                 session["admin_username"] = admin["username"]
                 session["_csrf_token"] = secrets.token_urlsafe(32)
                 flash("Login realizado com sucesso.", "success")
-                return redirect(url_for("admin_dashboard"))
+                return redirect("/admin/dashboard")
             record_failed_login(ip_address)
             flash("Usuário ou senha inválidos.", "danger")
         return render_template("admin/login.html")
@@ -138,14 +151,20 @@ def create_app():
     def admin_logout():
         session.clear()
         flash("Você saiu da área administrativa.", "success")
-        return redirect(url_for("admin_login"))
+        return redirect("/admin")
 
     @app.route("/admin/dashboard")
+    @app.route("/admin/dashboard/")
+    @app.route("/painel")
+    @app.route("/painel/")
+    @app.route("/dashboard")
+    @app.route("/dashboard/")
     @login_required
     def admin_dashboard():
         return render_template("admin/dashboard.html", stats=get_dashboard_stats(), tools=list_tools(include_hidden=True), categories=list_categories())
 
     @app.route("/admin/site", methods=["GET", "POST"])
+    @app.route("/admin/site/", methods=["GET", "POST"])
     @login_required
     def admin_site_settings():
         settings = get_site_settings()
@@ -160,6 +179,7 @@ def create_app():
         return render_template("admin/site_settings.html", settings=settings)
 
     @app.route("/admin/ferramentas/nova", methods=["GET", "POST"])
+    @app.route("/admin/ferramentas/nova/", methods=["GET", "POST"])
     @login_required
     def admin_tool_new():
         categories = list_categories()
@@ -177,6 +197,7 @@ def create_app():
         return render_template("admin/tool_form.html", tool=None, categories=categories)
 
     @app.route("/admin/ferramentas/<int:tool_id>/editar", methods=["GET", "POST"])
+    @app.route("/admin/ferramentas/<int:tool_id>/editar/", methods=["GET", "POST"])
     @login_required
     def admin_tool_edit(tool_id):
         tool = get_tool(tool_id, include_hidden=True)
@@ -199,6 +220,7 @@ def create_app():
         return render_template("admin/tool_form.html", tool=tool, categories=categories)
 
     @app.route("/admin/ferramentas/<int:tool_id>/excluir", methods=["POST"])
+    @app.route("/admin/ferramentas/<int:tool_id>/excluir/", methods=["POST"])
     @login_required
     def admin_tool_delete(tool_id):
         delete_tool(tool_id)
@@ -206,6 +228,7 @@ def create_app():
         return redirect(url_for("admin_dashboard"))
 
     @app.route("/admin/ferramentas/<int:tool_id>/duplicar", methods=["POST"])
+    @app.route("/admin/ferramentas/<int:tool_id>/duplicar/", methods=["POST"])
     @login_required
     def admin_tool_duplicate(tool_id):
         new_id = duplicate_tool(tool_id)
@@ -215,6 +238,7 @@ def create_app():
         return redirect(url_for("admin_tool_edit", tool_id=new_id))
 
     @app.route("/admin/categorias", methods=["GET", "POST"])
+    @app.route("/admin/categorias/", methods=["GET", "POST"])
     @login_required
     def admin_categories():
         if request.method == "POST":
@@ -228,6 +252,7 @@ def create_app():
         return render_template("admin/categories.html", categories=list_categories())
 
     @app.route("/admin/categorias/<int:category_id>/editar", methods=["POST"])
+    @app.route("/admin/categorias/<int:category_id>/editar/", methods=["POST"])
     @login_required
     def admin_category_edit(category_id):
         if not get_category(category_id):
@@ -241,6 +266,7 @@ def create_app():
         return redirect(url_for("admin_categories"))
 
     @app.route("/admin/categorias/<int:category_id>/excluir", methods=["POST"])
+    @app.route("/admin/categorias/<int:category_id>/excluir/", methods=["POST"])
     @login_required
     def admin_category_delete(category_id):
         if delete_category(category_id):
@@ -285,7 +311,7 @@ def login_required(view):
     def wrapped(*args, **kwargs):
         if not is_logged_in():
             flash("Entre para acessar a área administrativa.", "warning")
-            return redirect(url_for("admin_login"))
+            return redirect("/admin")
         return view(*args, **kwargs)
     return wrapped
 
